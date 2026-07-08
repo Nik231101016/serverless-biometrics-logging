@@ -15,22 +15,22 @@ def process_latest_employee_photo():
         print("🛑 Error: S3_BUCKET_NAME environment variable is missing.")
         sys.exit(1)
 
-    # Search project workspace directory for image files
+    # 1. DYNAMIC MATCHING: Scan the folder for ANY image file
     valid_extensions = (".jpg", ".jpeg", ".png")
     photo_files = [f for f in os.listdir(".") if f.lower().endswith(valid_extensions)]
 
     if not photo_files:
-        print("📁 Inspection Notice: No new employee photo detected in current workspace commit.")
+        print("📁 Inspection Notice: No image files discovered in the current commit workspace.")
         return
 
-    # Sort to pick the most recent image uploaded
+    # Automatically grab the first image file found in the commit push
     target_photo = photo_files[0]
     s3_key = f"employees/{target_photo}"
 
-    print(f"📸 Found photo targeting processing loop: {target_photo}")
-    print(f"📤 Uploading {target_photo} securely to Amazon S3 bucket...")
+    print(f"📸 Automation Engine -> Detected target image: {target_photo}")
+    print(f"📤 Uploading {target_photo} securely to Amazon S3...")
     
-    # 1. Upload photo to S3
+    # 2. Dynamic Upload to S3
     with open(target_photo, "rb") as image_file:
         s3_client.put_object(
             Bucket=BUCKET_NAME,
@@ -40,8 +40,8 @@ def process_latest_employee_photo():
         )
     print("🟢 S3 Storage Archival Complete.")
 
-    # 2. Trigger Amazon Rekognition Face Detection API
-    print("🧠 Triggering Amazon Rekognition computer vision models...")
+    # 3. Dynamic Rekognition Face Detection API Trigger
+    print("🧠 Triggering Amazon Rekognition computer vision analysis...")
     response = rekognition.detect_faces(
         Image={"S3Object": {"Bucket": BUCKET_NAME, "Name": s3_key}},
         Attributes=["DEFAULT"]
@@ -51,6 +51,7 @@ def process_latest_employee_photo():
     num_faces = len(face_details)
 
     print("\n========= REKOGNITION BIOMETRIC REPORT =========")
+    print(f"Target Processed         : {target_photo}")
     print(f"Number of Faces Detected : {num_faces}")
     
     faces_summary = []
@@ -63,7 +64,7 @@ def process_latest_employee_photo():
         })
     print("================================================\n")
 
-    # 3. Save Compiled Diagnostics as result.json
+    # 4. Save Compiled Dynamics as result.json
     output_payload = {
         "processed_file": target_photo,
         "s3_storage_uri": f"s3://{BUCKET_NAME}/{s3_key}",
