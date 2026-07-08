@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+# 🔐 TELL GITHUB TO ALLOW THIS WORKFLOW TO PUSH CODE BACK TO THE REPO
+permissions:
+  contents: write
+
 jobs:
   analyze-media:
     runs-on: ubuntu-latest
