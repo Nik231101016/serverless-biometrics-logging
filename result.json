@@ -1,11 +1,25 @@
-{
-    "processed_file": "image.jpg",
-    "s3_storage_uri": "s3://security-employee-vault-nik/employees/image.jpg",
-    "total_faces_detected": 1,
-    "faces": [
-        {
-            "face_index": 1,
-            "confidence": 100.0
-        }
-    ]
-}
+[
+    {
+        "processed_file": "image.jpg",
+        "s3_storage_uri": "s3://security-employee-vault-nik/employees/image.jpg",
+        "total_faces_detected": 1,
+        "faces": [
+            {
+                "face_index": 1,
+                "confidence": 100.0
+            }
+        ]
+    },
+    {
+        "timestamp": "2026-07-08 10:27:57",
+        "processed_file": "image.jpg",
+        "s3_storage_uri": "s3://security-employee-vault-nik/employees/image.jpg",
+        "total_faces_detected": 1,
+        "faces": [
+            {
+                "face_index": 1,
+                "confidence": 100.0
+            }
+        ]
+    }
+]
