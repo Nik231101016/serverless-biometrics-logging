@@ -1,0 +1,42 @@
+name: Employee Visual Biometrics Processing
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  analyze-media:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Repository References
+        uses: actions/checkout@v4
+
+      - name: Initialize Runtime Python Workspace Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install System Engine Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Process Visual Face Telemetry Loop
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+        run: |
+          python process_photo.py
+
+      # NEW STEP: Auto-commit the resulting JSON back into your GitHub repo history!
+      - name: Commit and Persist Diagnostics Log Output
+        run: |
+          git config --global user.name "GitHub Actions Core Engine"
+          git config --global user.email "actions@github.com"
+          git add result.json || echo "No result matrix to save"
+          git commit -m "chore: telemetry tracking update [skip ci]" || echo "No changes detected"
+          git push
