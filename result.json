@@ -1,6 +1,6 @@
 {
-    "processed_file": "employee_01.jpg",
-    "s3_storage_uri": "s3://security-employee-vault-nik/employees/employee_01.jpg",
+    "processed_file": "image.jpg",
+    "s3_storage_uri": "s3://security-employee-vault-nik/employees/image.jpg",
     "total_faces_detected": 1,
     "faces": [
         {
