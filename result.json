@@ -33,5 +33,17 @@
                 "confidence": 100.0
             }
         ]
+    },
+    {
+        "timestamp": "2026-07-08 10:29:31",
+        "processed_file": "person2.jpg",
+        "s3_storage_uri": "s3://security-employee-vault-nik/employees/person2.jpg",
+        "total_faces_detected": 1,
+        "faces": [
+            {
+                "face_index": 1,
+                "confidence": 100.0
+            }
+        ]
     }
 ]
