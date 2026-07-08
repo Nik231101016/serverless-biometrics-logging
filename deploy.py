@@ -33,8 +33,10 @@ try:
     print("🟢 SSH Authentication Succeeded. Executing remote cloud deployment sequence...")
     
     # Sequential commands to pull down adjustments and run app
+    # Sequential commands updated for Ubuntu home directory layout structure
     commands = [
-        "cd /home/ec2-user/project",
+        "mkdir -p /home/ubuntu/project",
+        "cd /home/ubuntu/project",
         "git pull origin main || (git clone https://github.com/Nik231101016/aws-python-deployment-demo.git .)",
         "python3 app.py"
     ]
