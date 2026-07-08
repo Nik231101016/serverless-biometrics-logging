@@ -2,6 +2,7 @@ import json
 import os
 import sys
 import boto3
+from datetime import datetime
 
 # Initialize AWS Client SDKs using GitHub Environment Secrets
 AWS_REGION = os.environ.get("AWS_REGION", "ap-south-1")
@@ -64,18 +65,40 @@ def process_latest_employee_photo():
         })
     print("================================================\n")
 
-    # 4. Save Compiled Dynamics as result.json
-    output_payload = {
+    # 4. Create the new log entry object
+    new_entry = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "processed_file": target_photo,
         "s3_storage_uri": f"s3://{BUCKET_NAME}/{s3_key}",
         "total_faces_detected": num_faces,
         "faces": faces_summary
     }
 
+    # 5. 🔥 HISTORY APPENDFILE LOGIC 🔥
+    history = []
+    
+    # If result.json already exists, read it first so we don't erase old data
+    if os.path.exists("result.json"):
+        try:
+            with open("result.json", "r") as json_in:
+                data = json.load(json_in)
+                # Ensure it's a list format so we can append to it cleanly
+                if isinstance(data, list):
+                    history = data
+                else:
+                    # Fallback if old format was a single JSON object instead of a list
+                    history = [data]
+        except Exception as read_err:
+            print(f"⚠️ Notice: result.json was empty or corrupted, resetting history block. Error: {str(read_err)}")
+
+    # Add the new scan record straight to our collection array
+    history.append(new_entry)
+
+    # Write the entire appended list history matrix back down to the workspace
     with open("result.json", "w") as json_out:
-        json.dump(output_payload, json_out, indent=4)
+        json.dump(history, json_out, indent=4)
         
-    print("💾 Compiled analytics metrics written out safely to result.json.")
+    print("💾 Compiled analytics metrics appended safely to history log array in result.json.")
 
 if __name__ == "__main__":
     process_latest_employee_photo()
