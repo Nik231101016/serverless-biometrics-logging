@@ -35,7 +35,7 @@ try:
     # Sequential commands to pull down adjustments and run app
     commands = [
         "cd /home/ec2-user/project",
-        "git pull origin main || (git clone https://github.com/YOUR_GITHUB_USERNAME/aws-python-deployment-demo.git .)",
+        "git pull origin main || (git clone https://github.com/Nik231101016/aws-python-deployment-demo.git .)",
         "python3 app.py"
     ]
     
