@@ -1,11 +1,11 @@
 import os
 import sys
+from io import StringIO
 import paramiko
 
 # Read environment variables injected securely by GitHub Secrets
 EC2_HOST = os.environ.get("EC2_HOST")
-EC2_USERNAME = os.environ.get("EC2_USERNAME", "ec2-user")
-# GitHub actions passes the secret key value as a multi-line string
+EC2_USERNAME = os.environ.get("EC2_USERNAME", "ubuntu")
 SSH_PRIVATE_KEY_DATA = os.environ.get("PRIVATE_KEY")
 
 if not EC2_HOST or not SSH_PRIVATE_KEY_DATA:
@@ -19,8 +19,9 @@ try:
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     
-    # Load the private key string data directly from environment memory
-    pkey_io = paramiko.RSAKey.from_private_key_list(SSH_PRIVATE_KEY_DATA.splitlines())
+    # Modern working approach: Wrap the private key string in a StringIO stream object
+    private_key_stream = StringIO(SSH_PRIVATE_KEY_DATA.strip())
+    pkey_io = paramiko.RSAKey.from_private_key(private_key_stream)
     
     # Connect to remote target host
     client.connect(
@@ -32,7 +33,6 @@ try:
     
     print("🟢 SSH Authentication Succeeded. Executing remote cloud deployment sequence...")
     
-    # Sequential commands to pull down adjustments and run app
     # Sequential commands updated for Ubuntu home directory layout structure
     commands = [
         "mkdir -p /home/ubuntu/project",
